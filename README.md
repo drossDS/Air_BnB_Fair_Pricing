@@ -8,34 +8,40 @@ Airbnb is a popular website for those who travel for business or pleasure and ne
 
 This project will seek to determine if an accurate fair-pricing tool can be developed to predict the prices of Airbnb listings in the Boston area while providing suggestions for currently listed Airbnb’s.  The accuracy of the pricing tool will be evaluated by the root mean squared error, and the target error will be approximately equal to $20 given that most Airbnb listings are listed in the low hundreds of dollars.
 
-# 2. Project Approach and EDA
+# 2. Project Approach
+At a very high-level, Airbnb data are explored to determine how closely the features provided in the data correlate to either price or the logarithm of price.  Then features are engineered and also correlated to price and log price.  All features (original and engineered) are then used to train models based on how strongly they correlate with price and log price.  Different feature sets are created with different numbers of features and modeled against 7 different varieties of regression models.  Some optimization techniques are attempted and the best model is selected as the fair price recommender.  The recommender then uses similarity metrics to compare the desired characteristics of a user's Airbnb and output similar current listings.
+
 ## 2.1.  Code Notebooks (Notebook Directory)
 There are six notebooks associated with this project.  A quick overview of each will be provided here:
 
 * Notebook 1 - Exploratory Data Analysis.  Creates train, test, validation datasets, and performs simple EDA on numerical and categorical variables.  This excludes EDA on columns which require advanced preprocessing and feature engineering
 * Notebook 2 - Feature Engineering Part 1.  Examines the features excluded from EDA and extracts or creates new features
 * Notebook 3 - Feature Engineering Part 2.  Creates a feature loosely representing the distance from each listing to the nearest public transit (subway) stop obtaining additional data from the web
-* Notebook 4 - Data Preprocessor and Compiler - Creates functions which perform all necessary transformation steps (previously performed in Notebooks 1, 2 and 3) to all datasets
+* Notebook 4 - Data Preprocessor and Compiler - Creates functions which perform all necessary transformation steps (previously performed in Notebooks 1, 2 and 3) to all datasets (training, validation, and testing)
 * Notebook 5 - Modeling - Selects features based on correlation and creates price prediction models
 * Notebook 6 - Recommender - Creates a near-prototype fair price and listing recommender tool
 
 
-# 3. Description of Data
-## 3.1. Notebook 1 - Airbnb Data
+# 3. Description of Data and Exploratory Data Analysis
+## 3.1. Airbnb Data (Notebook 1)
 * "Inside Airbnb" is a database which regularly collects Airbnb listing data for multiple cities around the world.  The website can be accessed [here](http://insideairbnb.com/get-the-data/) by scrolling down to where Boston is listed
 * The actual data was downloaded in the Boston section by clicking the '[listings.csv.gz](http://data.insideairbnb.com/united-states/ma/boston/2023-03-19/data/listings.csv.gz)' link
 * The data dictionary can be accessed from the main webpage above and is located [here](https://docs.google.com/spreadsheets/d/1iWCNJcSutYqpULSQHlNyGInUvHg2BoUGoNRIGa6Szc4/edit#gid=1322284596)
 
 The data were downloaded on 2023-05-30 and are from the most recent scraping dated 2023-03-19 on the Inside Airbnb website
 
-
 Other data are sourced in Notebook 3 from the Massachusetts Bay Transit Authority (MBTA) Website and the Google Geocoding API.  Those sources will be discussed in greater detail in that notebook.
 
-## 3.2 Notebook 2 - Suplemental Data
+## 3.2 Suplemental Data (Notebook 3)
 Supplemental data are gathered in an attempt to create features mimicing the distance between a listing's location and the closest subway stop.  Latitude and longitude data are provided for each listing from Inside Airbnb, and the subway stop locations were gathered via the following method:
 * The [MBTA Stations](https://www.mbta.com/stops/subway) page was scraped to find all urls for all stations
 * Station site was then scraped to find the station address
 * The Google Geocoding API was then used to retrieve latitude and longitude for each address.  See the documentation [here](https://developers.google.com/maps/documentation/geocoding)
+
+# 3.3 - Exploratory Data Analysis and Feature Engineering
+Numeerical and categorical features from the Airbnb data were examined.  Many of the features, such as the price, were exponentially distributed.  As a result of this, it was decided that EDA would focus primaily on correlations to price and log price, and in some cases, the logarithm of the features themselves were also calcualted and corrleated to price and log price.
+
+Features were created from the more detailed text columns that were provided in the Airbnb data such as the listing name, amenities, description, etc.  Each of these were tokenized via some method to extract words or phrases that could be examined for correlation to price and log price.
 
 # 4. Modeling
 
@@ -43,6 +49,12 @@ Supplemental data are gathered in an attempt to create features mimicing the dis
 The root mean squared error is the primary model evaluation metric as it would be expressed in the same units as the target variable, price.  This is a very tangible measure of how variable a model is simply because it outputs dollar amounts.
 
 The R-squared value will act as a secondary metric to quickly evaluate the quality of the model itself and how much better (if at all, it is compared to the null model).
+
+## 4.2. Premodeling Feature Selection
+Correlation coefficients were calcualted between all engineered features and price/log_price.  Features with the highest magnitude correlations were then populated into featuer sets which were used to generate datasets to train models.
+
+## 4.3. Models and Optimization
+Seven diffferent varieties of regression models were emploed and run against all feature sets.
 
 # Discussion/ Summary
 
