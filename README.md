@@ -41,7 +41,7 @@ Supplemental data are gathered in an attempt to create features mimicking the di
 # 3.3 - Exploratory Data Analysis and Feature Engineering
 Numerical and categorical features from the Airbnb data were examined.  Many of the features, such as the price, were exponentially distributed.  As a result of this, it was decided that EDA would focus primarily on correlations to price and log price, and in some cases, the logarithm of the features themselves were also calculated and correlated to price and log price.
 
-### SHOW THE PRICE PLOT
+![Price Distribution](images/price_dist.png)
 
 Features were created from the more detailed text columns that were provided in the Airbnb data such as the listing name, amenities, description, etc.  Each of these were tokenized via some method to extract words or phrases that could be examined for correlation to price and log price.
 
@@ -60,7 +60,7 @@ Seven different varieties of regression models were implemented and run against 
 ## 4.4. Modeling Results
 The best model was a random forest regressor set to default parameters.  It was only slightly better than the null model.
 
-### SHOW A PLOT OF THE DATA
+![Price Distribution](images/best_model_plot.png)
 
 The most important modeling results are provided in the table below:
 |                             | RMSE    | r2    |
@@ -75,7 +75,7 @@ Additionally, model optimization techniques and dimensionality reduction techniq
 # 5. Discussion
 The model appears to struggle with highly-priced listings.  These were quickly examined and it was ultimately determined that a much deeper study would be required in a subsequent phase of this project to understand the reasons for such poor predictions.  The plot below shows how these higher priced listings in the validation dataset affect the model RMSE by providing RMSE values for a given price limit (for both the training and validation sets) versus the pricing limit.
 
-### SHOW THAT PLOT
+![Price Distribution](images/best_model_plot_overlay.png)
 
 More domain knowledge and data could help to understand some of these more difficult listings and create features that will improve the model performance.  However, it is also possible that the provided data cannot accurately describe the prices which are set by very different people with their own personal and financial needs.  Additional study of the data is required to determine how much more information can be gained from it.
 
