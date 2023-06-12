@@ -32,33 +32,80 @@ The data were downloaded on 2023-05-30 and are from the most recent scraping dat
 
 Other data are sourced in Notebook 3 from the Massachusetts Bay Transit Authority (MBTA) Website and the Google Geocoding API.  Those sources will be discussed in greater detail in that notebook.
 
-## 3.2 Suplemental Data (Notebook 3)
-Supplemental data are gathered in an attempt to create features mimicing the distance between a listing's location and the closest subway stop.  Latitude and longitude data are provided for each listing from Inside Airbnb, and the subway stop locations were gathered via the following method:
+## 3.2 Supplemental Data (Notebook 3)
+Supplemental data are gathered in an attempt to create features mimicking the distance between a listing's location and the closest subway stop.  Latitude and longitude data are provided for each listing from Inside Airbnb, and the subway stop locations were gathered via the following method:
 * The [MBTA Stations](https://www.mbta.com/stops/subway) page was scraped to find all urls for all stations
 * Station site was then scraped to find the station address
 * The Google Geocoding API was then used to retrieve latitude and longitude for each address.  See the documentation [here](https://developers.google.com/maps/documentation/geocoding)
 
 # 3.3 - Exploratory Data Analysis and Feature Engineering
-Numeerical and categorical features from the Airbnb data were examined.  Many of the features, such as the price, were exponentially distributed.  As a result of this, it was decided that EDA would focus primaily on correlations to price and log price, and in some cases, the logarithm of the features themselves were also calcualted and corrleated to price and log price.
+Numerical and categorical features from the Airbnb data were examined.  Many of the features, such as the price, were exponentially distributed.  As a result of this, it was decided that EDA would focus primarily on correlations to price and log price, and in some cases, the logarithm of the features themselves were also calculated and correlated to price and log price.
+
+### SHOW THE PRICE PLOT
 
 Features were created from the more detailed text columns that were provided in the Airbnb data such as the listing name, amenities, description, etc.  Each of these were tokenized via some method to extract words or phrases that could be examined for correlation to price and log price.
 
 # 4. Modeling
-
 ## 4.1. Modeling Evaluation Metrics
 The root mean squared error is the primary model evaluation metric as it would be expressed in the same units as the target variable, price.  This is a very tangible measure of how variable a model is simply because it outputs dollar amounts.
 
 The R-squared value will act as a secondary metric to quickly evaluate the quality of the model itself and how much better (if at all, it is compared to the null model).
 
-## 4.2. Premodeling Feature Selection
-Correlation coefficients were calcualted between all engineered features and price/log_price.  Features with the highest magnitude correlations were then populated into featuer sets which were used to generate datasets to train models.
+## 4.2. Pre-Modeling Feature Selection
+Correlation coefficients were calculated between all engineered features and price/log_price.  Features with the highest magnitude correlations were then populated into feature sets which were used to generate datasets to train models.
 
 ## 4.3. Models and Optimization
-Seven diffferent varieties of regression models were emploed and run against all feature sets.
+Seven different varieties of regression models were implemented and run against all feature sets.  The best model was then selected and optimization and dimensionality reduction techniques were employed in an attempt to improve the model performances.  Additionally, a brief examination of poorly predicted and high-prices listings were performed.
 
-# Discussion/ Summary
+## 4.4. Modeling Results
+The best model was a random forest regressor set to default parameters.  It was only slightly better than the null model.
 
-# Conclusions
-## Fair Pricing Model Conclusions
+### SHOW A PLOT OF THE DATA
 
-## Recommender Conclusions
+The most important modeling results are provided in the table below:
+|                             | RMSE    | r2    |
+|-----------------------------|---------|-------|
+| Null Model, Training Data   | $208.33 | 0     |
+| Null Model, Validation Data | $407.30 | 0     |
+| Best Model, Training Data    | $138.88 | 0.556 |
+| Best Model, Validation Data | $388.90 | 0.087 |
+
+Additionally, model optimization techniques and dimensionality reduction techniques did not serve to improve the models and rather, made them slightly worse.
+
+# 5. Discussion
+The model appears to struggle with highly-priced listings.  These were quickly examined and it was ultimately determined that a much deeper study would be required in a subsequent phase of this project to understand the reasons for such poor predictions.  The plot below shows how these higher priced listings in the validation dataset affect the model RMSE by providing RMSE values for a given price limit (for both the training and validation sets) versus the pricing limit.
+
+### SHOW THAT PLOT
+
+More domain knowledge and data could help to understand some of these more difficult listings and create features that will improve the model performance.  However, it is also possible that the provided data cannot accurately describe the prices which are set by very different people with their own personal and financial needs.  Additional study of the data is required to determine how much more information can be gained from it.
+
+# 6. Conclusions
+## 6.1. Fair Pricing Model Conclusions
+* An Airbnb fair price predictor is able to be created, however, it's performance is almost negligibly better than the null model
+* The best performing model was a random forest regressor with an RMSE on the validation data of \\$388.90 which is only slightly better than the null model of \\$407.30
+    * The R-squared value of this model is 0.087
+    * This is well beyond the problem statement target of $20
+* This model struggle with very expensive Airbnb listings as removing these listings causes the model performance to improve
+* Even with the effects of outliers minimized, the predictions are still highly variable
+* Model optimization and dimensionality reduction techniques did not prove capable of improving the model performance
+* Additional features must be created to see any significant improvements in model performance
+
+## 6.2 - Recommender Conclusions
+* A recommender system was able to be developed which would suggest a requested number of Airbnb listings based on user inputs
+* The pricing model from the previous notebook was able to be utilized to provide a pricing estimate
+    * Despite the poor performance of the model, it was still able to produce an estimate which seems reasonable based on the distribution of similar listings
+    
+# 7. Next Steps
+## 7.1. Fair Pricing Model
+* Perform an in-depth exploration of higher-priced listings, and poorly predicted listings from the validation dataset
+* Explore the creation of the additional features based on the features that were not able to be included in this phase of prototyping.  These would include license, host neighborhood, and host location
+    * Creating polynomial features is another technique that could be employed to predict prices
+* Understand the impact that unsupervised learning techniques such as clustering may have on predictions by attempting to categorizing listings or hosts
+* Continue to refine PCA
+* Train a neural network regressor on the data and compare results
+* Take all of the above improvements and attempt predictions on the testing dataset
+* If possible implement the new model into the recommender
+
+## 7.2. Recommender
+* Incorporate a refined pricing model if one is able to be produced
+* Create a full prototype by implementing this recommender in a Streamlit app
