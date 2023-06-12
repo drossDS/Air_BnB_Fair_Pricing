@@ -45,7 +45,7 @@ Numerical and categorical features from the Airbnb data were examined.  Many of 
 
 Features were created from the more detailed text columns that were provided in the Airbnb data such as the listing name, amenities, description, etc.  Each of these were tokenized via some method to extract words or phrases that could be examined for correlation to price and log price.
 
-# 4. Modeling
+# 4. Modeling / Recommender
 ## 4.1. Modeling Evaluation Metrics
 The root mean squared error is the primary model evaluation metric as it would be expressed in the same units as the target variable, price.  This is a very tangible measure of how variable a model is simply because it outputs dollar amounts.
 
@@ -71,6 +71,11 @@ The most important modeling results are provided in the table below:
 | Best Model, Validation Data | $388.90 | 0.087 |
 
 Additionally, model optimization techniques and dimensionality reduction techniques did not serve to improve the models and rather, made them slightly worse.
+
+## 4.5. Recommender Results
+A recommender was able to be created which would take user-input Airbnb criteria and produce a list and price distribution of similar listings currently on Airbnb.  The graphical output of this is shown below with the red line as the fair price prediction.
+
+![Price Distribution](images/rec_output.png)
 
 # 5. Discussion
 The model appears to struggle with highly-priced listings.  These were quickly examined and it was ultimately determined that a much deeper study would be required in a subsequent phase of this project to understand the reasons for such poor predictions.  The plot below shows how these higher priced listings in the validation dataset affect the model RMSE by providing RMSE values for a given price limit (for both the training and validation sets) versus the pricing limit.
