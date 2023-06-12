@@ -61,7 +61,7 @@ Seven different varieties of regression models were implemented and run against 
 ## 4.4. Modeling Results
 The best model was a random forest regressor set to default parameters.  It was only slightly better than the null model.
 
-![Price Distribution](images/best_model_plot.png)
+![Price Distribution](images/best_model_plot_good.png)
 
 The most important modeling results are provided in the table below:
 |                             | RMSE    | r2    |
