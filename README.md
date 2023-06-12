@@ -1,2 +1,3 @@
-# Air_BnB_Price_Pricing
-initial private repo
+# Project : Boston Airbnb Fair Pricing Tool and Recommender
+## Daniel Rossetti, Founder, Data Scientist for 'Cheap Stays, LLC'
+
